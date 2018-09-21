@@ -11,11 +11,16 @@ Attacker: kali-linux-2018.3-amd64.iso
 ```
 
 **实验步骤**：
+
 1.配置一块安装了kali的 .vdi 硬盘多重加载，并在virtualbox中新建三台虚拟机，分别设置为Victim、Gateway、Attacker。
+
 2.分别给三台虚拟机添加网卡实现要求的功能。
+
 3.开启 **Gateway** ipv4转发功能，添加 **Gateway** 路由规则。
 
+
 **具体步骤说明**：
+
    一、配置一块安装了kali的 .vdi 硬盘多重加载，并在virtualbox中新建三台虚拟机，分别设置为Victim、Gateway、Attacker。
    
         首先释放对应的  .vdi 硬盘，然后将该硬盘的类型改为多重加载，然后新建虚拟机的时候选用多重加载的虚拟硬盘。
@@ -43,13 +48,18 @@ Attacker: kali-linux-2018.3-amd64.iso
 ```
 
 配置成功截图：
+
 Victim
+
 ![3](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/3.PNG)
 
+
 Gateway
+
 ![4](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/4.PNG)
 
 Attacker
+
 ![5](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/5.PNG)
 
 
@@ -110,7 +120,9 @@ chmod +x /etc/network/if-pre-up.d/iptables
  -  靶机可以直接访问攻击者主机
  
   ![8](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/%E9%9D%B6%E6%9C%BA%E5%88%B0%E6%94%BB%E5%87%BB%E8%80%85.PNG)
+
  -  攻击者主机无法直接访问靶机
+ 
 ![9](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/%E6%94%BB%E5%87%BB%E8%80%85%E5%88%B0%E9%9D%B6%E6%9C%BA.PNG)
  
  - 网关可以直接访问攻击者主机和靶机
