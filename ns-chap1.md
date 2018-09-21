@@ -119,9 +119,11 @@ chmod +x /etc/network/if-pre-up.d/iptables
 ![11](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/%E7%BD%91%E5%85%B3%E5%88%B0%E6%94%BB%E5%87%BB%E8%80%85.PNG)
 
  - 靶机的所有对外上下行流量必须经过网关
+ - 
      靶机的网关ip 被设置为Gateway  eth0 的ip，靶机本身不能上网，靶机只能经由 Gateway 对外访问。
      
  -  所有节点均可以访问互联网
+ -  
      Victim 可以通过 Gateway 上网。
      Gateway  自身具有 NAT 网卡，可通过主机网络上网。
      Attacker  自身具有 NAT 网卡，可通过主机网络上网。
