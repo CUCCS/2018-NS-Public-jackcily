@@ -22,6 +22,7 @@ Attacker: kali-linux-2018.3-amd64.iso
    ![ 1](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/1.PNG)
    
    二、分别给三台虚拟机添加网卡
+   
    首先给三台虚拟机添加网卡，网卡类型如下
 
        Victim：internal  networking mode (eth0)
@@ -56,6 +57,7 @@ Attacker
 
    
    三、开启 **Gateway** ipv4转发功能，添加**Gateway**路由规则，设置网关转发局域网192.168.1.0/24中的数据包。
+   
        默认情况下，linux的三层包转发功能是关闭的，所以网关如果收到目的地址不是本机网卡ip的时候，会直接将数据包丢弃。如果要让**Gateway**实现转发，需要改变 Gateway 的一个系统参数以打开 ipv4 转发功能。
 
 
@@ -99,6 +101,7 @@ chmod +x /etc/network/if-pre-up.d/iptables
 
    
    **实验结果展示**：
+   
   配置完成后，满足实验一要求的拓扑关系如下图：
 ![7](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/8.png)
 
@@ -131,6 +134,7 @@ chmod +x /etc/network/if-pre-up.d/iptables
  
 **实验问题**：
 1、网关DNS ip为  192.168.1.1 (内部网卡ip），导致网关DNS解析失败。
+
 解决方法:更换网关ip 为 202.205.16.4
 我查阅的资料
 [iptables讲解](http://blog.51cto.com/wwdhks/1154032)
