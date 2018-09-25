@@ -149,6 +149,7 @@ chmod +x /etc/network/if-pre-up.d/iptables
 1、网关DNS ip为  192.168.1.1 (内部网卡ip），导致网关DNS解析失败。
 
 解决方法:更换网关ip 为 202.205.16.4
+
 我查阅的资料
 [iptables讲解](http://blog.51cto.com/wwdhks/1154032)
 [iptables使用手册](http://ipset.netfilter.org/iptables.man.html)
