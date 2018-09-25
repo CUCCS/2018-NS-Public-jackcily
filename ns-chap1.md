@@ -17,7 +17,7 @@ Attacker: kali-linux-2018.3-amd64.iso
 
 2.分别给三台虚拟机添加网卡实现要求的功能。
 
-3.开启 **Gateway** ipv4转发功能，添加 **Gateway** 路由规则。
+3.开启 **Gateway** ipv4转发功能，添加 **Gateway** 防火墙NAT规则。
 
 
 **具体步骤说明**：
@@ -67,44 +67,49 @@ Attacker
 
 
    
-   三、开启 **Gateway** ipv4转发功能，添加**Gateway**路由规则，设置网关转发局域网192.168.1.0/24中的数据包。
+   三、开启 **Gateway** ipv4转发功能，添加**Gateway**防火墙NAT规则，设置网关转发局域网192.168.1.0/24中的数据包。
    
        默认情况下，linux的三层包转发功能是关闭的，所以网关如果收到目的地址不是本机网卡ip的时候，会直接将数据包丢弃。如果要让**Gateway**实现转发，需要改变 Gateway 的一个系统参数以打开 ipv4 转发功能。
 
 
-           使用以下三条指令都可以打开
-           echo 1 > /proc/sys/net/ipv4/ip_forward
-           sysctl net.ipv4.ip_forward=1
-           vim /etc/sysctl.conf  ,添加一条语句 net.ipv4.ip_forward =1, sysctl -p
+         使用以下三条指令都可以打开
+          #方法1
+          echo 1 > /proc/sys/net/ipv4/ip_forward
+
+          #方法2
+          sysctl net.ipv4.ip_forward=1
+
+          #方法3
+          #编辑 vim /etc/sysctl.conf  
+          #添加一条语句 net.ipv4.ip_forward =1
+           sysctl -p
 
    
-   添加网关路由规则
+   添加网关防火墙NAT规则
    
 
 ```
 iptables -t nat -A POSTROUTING　-s 192.168.1.0/24 -o eth1 -j  MASQUERADE
 ```
-保存iptables现有规则到/etc/iptables.up.rules
+配置对应的网卡开启和关闭防火墙规则，保存现有的iptables 防火墙NAT规则。
+```
+cat << EOF >  /etc/network/if-pre-up.d/firewall
+#!/bin/sh
+/usr/sbin/iptables-restore  <  /etc/iptables.rules
+exit 0
+EOF
+chmod +x  /etc/network/if-pre-up.d/firewall
+
+
+cat << EOF >  /etc/network/if-post-down.d/firewall
+#!/bin/sh
+/usr/sbin/iptables-save  -c  >  /etc/iptables.rules
+exit 0
+EOF
+chmod +x  /etc/network/if-post-down.d/firewall
 
 ```
-iptables-save > /etc/iptables.up.rules
-```
-建立系统启动加载文件/etc/network/if-pre-up.d/iptables
 
-```
-vim /etc/network/if-pre-up.d/iptables
-```
-输入以下内容
-
-```
-#!/bin/bash
-/sbin/iptables-restore < /etc/iptables.up.rules
-```
-让文件具备执行权限
-
-```
-chmod +x /etc/network/if-pre-up.d/iptables
-```
 
 添加完成后，查看路由规则已经被配置好，截图如下：
 ![6](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/7.PNG)
@@ -114,7 +119,7 @@ chmod +x /etc/network/if-pre-up.d/iptables
    **实验结果展示**：
    
   配置完成后，满足实验一要求的拓扑关系如下图：
-![7](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/8.png)
+![7](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x01/8-2.png)
 
 连通性验证截图如下:
 
@@ -150,7 +155,10 @@ chmod +x /etc/network/if-pre-up.d/iptables
 
 解决方法:更换网关ip 为 202.205.16.4
 
+
 我查阅的资料
+
 [iptables讲解](http://blog.51cto.com/wwdhks/1154032)
+
 [iptables使用手册](http://ipset.netfilter.org/iptables.man.html)
 
