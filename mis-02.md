@@ -89,6 +89,7 @@ wlan0mon  13 channels in total; available frequencies :
 
 
 **问题**
+
 1、查看统计当前信号覆盖范围内一共有多少独立的SSID？其中是否包括隐藏SSID？哪些无线热点是加密/非加密的？加密方式是否可知？
 
 在终端中运行  `airodump-ng wlan0mon -w saved`  进行抓包
