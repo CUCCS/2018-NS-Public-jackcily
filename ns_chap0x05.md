@@ -183,6 +183,9 @@ print("yes")
 
 
 **实验内容**
+
+
+
 实验拓扑图结构如下：（沿用实验一配置）
 
 ![tuopu](https://raw.githubusercontent.com/CUCCS/2018-NS-Public-jackcily/ns_chap0x01/8-2.png)
@@ -192,7 +195,9 @@ print("yes")
 
 - [ ]  使用nc + scapy 测试四种扫描
    其中开启  `tcp:80` 服务使用 `nc -nvlp 80`  
+
    开启`udp:9000`服务使用 ` echo  -n "hello " | nc -nvulp  9000`
+
    四种 scan 均为在kali 终端 scapy中运行上文中的脚本
    
 
@@ -220,14 +225,19 @@ print("yes")
 
    
  实验完成结果和给定的[查阅资料](https://resources.infosecinstitute.com/port-scanning-using-scapy/)基本符合。
+
  其中，当攻击者试图扫描靶机时，由于数据包根本无法到达靶机，所以攻击者对靶机的端口扫描都是无响应的。
  
 
 
 
+
 - [ ] 使用socket 编程开启udp:9000服务，并用 nmap测试结果
+
 扫描者 ：`网关`       指令   `nmap -sU 192.168.1.2  - p 9000 `
+
 被扫描者：`靶机`    指令   `run  /mnt/share/udpserver.py`
+
 扫描者扫描结果
 
 ```
