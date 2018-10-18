@@ -1,0 +1,11 @@
+root@bogon:~# nmap -sU 192.168.1.2 -p 9000
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-10-18 12:01 EDT
+Nmap scan report for localhost (192.168.1.2)
+Host is up (0.00024s latency).
+
+PORT     STATE SERVICE
+9000/udp open  cslistener
+MAC Address: 08:00:27:3C:0F:56 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.13 seconds
+
