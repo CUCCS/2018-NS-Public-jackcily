@@ -5,7 +5,8 @@
     - attacker： kali 
     
     
-    网络拓扑图如下：
+   网络拓扑图如下：
+
      ![tuopu](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/tuopu.jpg)
          
    安装工具 wfuzz步骤如下：
@@ -16,7 +17,7 @@
       
   
 - [ ] 攻击分为三步进行：
-- 
+
 1.Fingerprinting
 
 2.Detection and exploitation of SQL injection
@@ -326,6 +327,7 @@ Requests/sec.: 688.6203
         ![16](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/16.PNG)
          
 然后在浏览器中，访问 `http://10.0.2.12/admin/uploads/shell.php3?cmd=uname`    ，这样在受害者端会执行指令 `uname` ,返回结果如下：
+
        ![17](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/17.PNG)
 
 还有许多指令也可以执行，事实上，webshell和 web server上运行的php脚本具有相同的权限。在victim的server端每一个命令的运行都是相互独立的。
