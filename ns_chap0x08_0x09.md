@@ -2,6 +2,7 @@
 
 - [ ] 实验环境
        ` Victim:     ip 192.168.29.123   Snort/Suricata + Guardian-1.7.tar.gz  + apache2`
+       
        `Attacker :   ip 192.168.29.122`
        
 - [ ] 实验背景
@@ -18,6 +19,7 @@
 		```
 	
 	- 安装apache2并开启服务（80端口）
+
 		`apt install apache2 &&service apache2 start`
 		
 	- 安装Suricata
@@ -68,13 +70,20 @@
 			
 		- 规则测试
 			- SQL注入检测
+			
 				`cd /root/guardian`
+				
 				`perl guardian.pl -c guardian.conf  #启动 guardian.pl`
+				
 				`snort -q -A fast -b -i eth1 -c /etc/snort/snort.conf -l /var/log/snort/ #打开Snort进行抓包`
+				
 				分别在URL中包含 `" OR AND order union` 等关键字，`guardian`监视窗口中出现警告，截图如下。
+				
 				![图一](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x08_0x09_FlippedClassroom/img/1.PNG)
 				![图二](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x08_0x09_FlippedClassroom/img/2.PNG)
 			
+
+
 				查看`/var/log/snort/` 路径下增加了一个 log日志
 
 				但是在触发规则前后，**iptables规则并无变化(没有出现先增加规则，然后规则又被删除的情况)？？？**
@@ -83,7 +92,9 @@
 				原理:  构造一个 HTTP Header 中包含有可疑字符串`() {` 的数据包，然后观察Snort是否能检查到该可疑字符串。
 				
 				- 想用 curl 实现，在Attacker中运行如下语句`curl -H "User-Agent: () { (a)=>\' sh -c "echo date"; cat echo" 192.168.29.123  #向服务器发送包含 () { 的数据包`
+				
 				但是在服务器端的`guardian` 没有任何输出。
+				
 				我在服务器端打开wireshark进行抓包，的确发现了包含`() {`的文件符合条件的数据包。
 
 				![图三](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x08_0x09_FlippedClassroom/img/3.jpg)
@@ -121,12 +132,15 @@
 		
 		- 规则测试
 			测试方法同Snort。
+			
 			首先打开 suricata
 			`suricata  -c /etc/suricata/suricata.yaml -i eth1 -l /var/log/suricata/`
+			
 			然后打开guardian
 			
 			在Attacker中使用浏览器访问 Victim，当URL中带有SQL注入关键字 and or order等关键字时，`suricata`中输出如下：
 			 ![图四](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/ns_chap0x08_0x09_FlippedClassroom/img/4.PNG)
+
 
 			使用`curl -H "User-Agent: () { (a)=>\' sh -c "echo date"; cat echo" 192.168.29.123 `访问Victim时，对应规则依然没有生效。
 						
@@ -135,16 +149,21 @@
 	
 	- IDS与防火墙的联动防御方式相比IPS方式防御存在哪些缺陷？是否存在相比较而言的优势？
 	 	首先明确一下三者的特点
+	 	
 	 	Firewall： 防火墙是一种协议控制机制，用于流量限制，但没有主动发现恶意流量的能力。
+	 	
 	 	IDS：入侵检测系统是一个旁路监听设备，没有也不需要跨接在任何链路上，可以根据流量特征检测入侵，但是并不能控制流量。所以需要与Firewalls协作对恶意流量防御。
+	 	
 	 	IPS：入侵防御系统是相当于具有流量控制能力的IDS，在检测到恶意流量时，可以通过网络协议，直接进行流量控制。
 		
 		IDS系统在“大规模组合式、分布式入侵”方面，还没有较好的解决办法，误报和漏报现象严重。
+		
 	 	相比之下，IPS具有检测和防御能力，可以直接在入口处就开始检测，而不是等进到内部网络以后再进行检测，IPS可以在应用层进行检测，弥补了传统的防火墙+IDS方案不能检测更多内容的不足，IPS可以进行更深度的流量检测。
 	 	
 	 - 配置 Suricata 为 IPS 模式，重复 [实验四](https://sec.cuc.edu.cn/huangwei/textbook/ns/chap0x09/exp.html#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98)  （内容参考自[Setting up IPS/inline for Linux](https://suricata.readthedocs.io/en/latest/setting-up-ipsinline-for-linux.html)
 	 	
 	 	使用NFQ配置Suricata 为 IPS 模式，首选使用 `suricata --build-info` 检测是否具有对应的工具
+	 	
 	 	使用 `suricata -c /etc/suricata/suricata.yaml -q 0`  运行Suricata 的IPS模式（使用 0号队列）
 	 	
 	 	配置 iptables，以发送流量到0号队列中(不指定时默认0号队列），用于suricata 读取。
@@ -154,6 +173,7 @@
 	 	```
 
 		使用 `nmap 192.168.29.123 -A -T4 -n -vv` 暴力扫描 Victim。
+		
 		由于上文中并未观察到`guardian `对iptables的操作，此处无法对比。
 	 	
  
