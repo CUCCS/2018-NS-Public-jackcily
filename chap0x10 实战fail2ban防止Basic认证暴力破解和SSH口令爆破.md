@@ -4,7 +4,7 @@
 
   - 实验环境
 
-    `kali     ip 169.254.227.181` 
+    `kali     ip 169.254.227.182` 
 
     `物理机 （虚拟网卡 ip ：169.254.227.181)  cmder`
 
@@ -47,9 +47,9 @@
 
 
   -  配置kali 支持SSH 登录
-  	
+  
   	-  配置SSH参数
-  	
+
   		```
   		vim /etc/ssh/sshd_config   #打开SSH配置文件
   		
@@ -59,7 +59,7 @@
   		```
 
   	-  启动SSH服务和使用SSH登陆
-  	
+
   		```
   		service ssh start
   		
