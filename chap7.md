@@ -70,6 +70,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 
  
 
+
      由上面的返回信息可以看到，我们可以获取server端 apache、php的`版本信息`。
 
    由上面的扫描结果可知，`443/tcp`端口并未开放，所以我们只能通过 HTTP的方式访问victim，如果victim只能通过HTTPS的方式进行访问，telent/natcat 就不能用于与 victim 通信，此时我们可以使用工具 `openssl` 访问victim(nc -nvlp 443 可以开启 443/https 服务)。
@@ -169,6 +170,8 @@ Requests/sec.: 688.6203
 
    在attacker中访问如下网址 `10.0.2.12/cat.php?id =2  and 1=1`，推测server端执行 `select id = 2 and 1=1 from .....` ,显示如下：
 
+   但是如果访问如下网址 `10.0.2.12/cat.php?id =2  and 1=2` ，页面确显示出错，证明无论是第一句的`1=1`还是第二句中的`2=2`，都在服务器端被执行了，此处通过对比检测的`盲检测`方法，找到了一个可以`注入and语句`的sql漏洞。
+
       ![4](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/4.PNG)
 
 
@@ -243,6 +246,7 @@ Requests/sec.: 688.6203
            ![7](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/7.PNG)
 
  
+
 
 2.当前用户     `http://vulnerable/cat.php?id=1 UNION SELECT 1, current_user(),3,4`
 ​       ![8](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/8.PNG)
