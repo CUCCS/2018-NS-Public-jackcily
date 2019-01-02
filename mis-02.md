@@ -26,8 +26,8 @@ Aircrack-ng + wireshark
 |0x0c  |  Deauthentication(解除身份验证)|
 
 
-  
-  
+
+
 2、STA加入一个无线网络时的开放式认证和关联加入网络的步骤如下：
 
 
@@ -37,7 +37,7 @@ Aircrack-ng + wireshark
       1.扫描阶段（SCAN）
       2.认证阶段 (Authentication) 
       3.关联（Association） 
-      
+
 
 
 接入过程如下图所示（转载自[此处](https://blog.csdn.net/hmxz2nn/article/details/79937344)）：
@@ -142,24 +142,23 @@ wlan0mon  13 channels in total; available frequencies :
 
 
    要查看该SSID是否需要加密，首先查看 对应的Beacon frame 的 `fixed parameters-Capabilities Information-Privacy 字段`是0还是1 ，若Privacy字段值为1表示为启用加密,则说明AP为加密模式。
-   
-   
+
+
 ![p8](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/mis_chapt0x02/p8.PNG)
-   
+
   再查看Authentication帧中的Authentication Algorithm字段的值为Open System，则说明并非Shared加密模式，而是Open加密或WPA加密。
-  
+
 
 ![p9](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/mis_chapt0x02/p9.PNG)
 
 
 2、如何分析出一个指定手机在抓包时间窗口内在手机端的无线网络列表可以看到哪些SSID？这台手机尝试连接了哪些SSID？最终加入了哪些SSID？
-       
+​       
    - 通过查看当前无线网络覆盖范围内有多少Beacon frame，或者回复给该手机的Probe  Responce frame 中的SSID，可知该手机总共可以看到的SSID。
-      
 
  - 通过查看该手机发送的 authentication frame，可以看到该手机试图连接了哪些SSID
- 
- 
+
+
   -  通过检查该手机收到的Association Response帧可以判断该手机最终加入了哪些SSID
 
 
@@ -197,7 +196,7 @@ wlan0mon  13 channels in total; available frequencies :
 
 
 ![11](https://github.com/CUCCS/2018-NS-Public-jackcily/raw/mis_chapt0x02/p11.PNG)
-      
+​      
 
 
 3、SSID包含在哪些类型的802.11帧？
@@ -206,14 +205,14 @@ wlan0mon  13 channels in total; available frequencies :
         Probe Request frame(广播帧SSID 可能为空）
         Probe Response frame
         Beacon frame
-        Authencition Request frame
-        Authencition Responce frame
+        Association Request
+        Association Response
 
  我查阅的资料
- 
+
  [无线接入过程](https://blog.csdn.net/hmxz2nn/article/details/79937344)
- 
+
  [Airodump-ng](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
- 
+
  [802.11简单认证过程](https://blog.csdn.net/eydwyz/article/details/70048858)
- 
+
